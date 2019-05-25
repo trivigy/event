@@ -1,0 +1,26 @@
+version: 2.1
+executors:
+  golang:
+    docker:
+      - image: circleci/golang:1.12.5
+jobs:
+  lint:
+    executor: golang
+    steps:
+      - checkout
+      - run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.16.0
+      - run: golangci-lint run ./...
+  test:
+    executor: golang
+    steps:
+      - checkout
+      - run: go get -v -d ./...
+      - run: go test -v ./...
+workflows:
+  version: 2
+  release:
+    jobs:
+      - lint
+      - test:
+          requires:
+            - lint
