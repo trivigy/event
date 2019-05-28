@@ -50,12 +50,12 @@ func (r *EventSuite) checkNotify(event *Event) {
 	for i := 0; i < N; i++ {
 		go func() {
 			start.Done()
-			val1 := event.Wait(context.Background())
+			val1 := event.Wait(nil)
 			mutex1.Lock()
 			results1 = append(results1, val1)
 			mutex1.Unlock()
 
-			val2 := event.Wait(context.Background())
+			val2 := event.Wait(nil)
 			mutex2.Lock()
 			results2 = append(results2, val2)
 			mutex2.Unlock()
