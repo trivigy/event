@@ -37,10 +37,10 @@ func (r *EventSuite) TestNotify() {
 
 func (r *EventSuite) checkNotify(event *Event) {
 	mutex1 := sync.Mutex{}
-	results1 := make([]bool, 0)
+	results1 := make([]error, 0)
 
 	mutex2 := sync.Mutex{}
-	results2 := make([]bool, 0)
+	results2 := make([]error, 0)
 
 	start := sync.WaitGroup{}
 	finish := sync.WaitGroup{}
@@ -69,9 +69,9 @@ func (r *EventSuite) checkNotify(event *Event) {
 	event.Set()
 	finish.Wait()
 
-	expected := make([]bool, N)
+	expected := make([]error, N)
 	for i := range expected {
-		expected[i] = true
+		expected[i] = nil
 	}
 
 	assert.Equal(r.T(), expected, results1)
@@ -79,7 +79,7 @@ func (r *EventSuite) checkNotify(event *Event) {
 }
 
 type outcome struct {
-	result bool
+	result error
 	lapse  time.Duration
 }
 
@@ -88,12 +88,12 @@ func (r *EventSuite) TestTimeout() {
 
 	N := 5
 	var mutex1 sync.Mutex
-	var results1 []bool
+	var results1 []error
 
 	var mutex2 sync.Mutex
 	var results2 []outcome
 
-	var expected []bool
+	var expected []error
 	finish := sync.WaitGroup{}
 	f := func() {
 		ctx1, cancel1 := context.WithTimeout(context.Background(), 0*time.Millisecond)
@@ -116,25 +116,25 @@ func (r *EventSuite) TestTimeout() {
 		finish.Done()
 	}
 
-	results1 = make([]bool, 0)
+	results1 = make([]error, 0)
 	results2 = make([]outcome, 0)
 	finish.Add(N)
 	for i := 0; i < N; i++ {
 		go f()
 	}
 	finish.Wait()
-	expected = make([]bool, N)
+	expected = make([]error, N)
 	for i := range expected {
-		expected[i] = false
+		expected[i] = context.DeadlineExceeded
 	}
 	assert.Equal(r.T(), expected, results1)
 	for _, o := range results2 {
-		assert.False(r.T(), o.result)
+		assert.Equal(r.T(), context.DeadlineExceeded, o.result)
 		assert.True(r.T(), o.lapse >= 0.6*500*time.Millisecond)
 		assert.True(r.T(), o.lapse < 1.1*500*time.Millisecond)
 	}
 
-	results1 = make([]bool, 0)
+	results1 = make([]error, 0)
 	results2 = make([]outcome, 0)
 	event.Set()
 	finish.Add(N)
@@ -142,20 +142,20 @@ func (r *EventSuite) TestTimeout() {
 		go f()
 	}
 	finish.Wait()
-	expected = make([]bool, N)
+	expected = make([]error, N)
 	for i := range expected {
-		expected[i] = true
+		expected[i] = nil
 	}
 	assert.Equal(r.T(), expected, results1)
 	for _, o := range results2 {
-		assert.True(r.T(), o.result)
+		assert.Nil(r.T(), o.result)
 	}
 }
 
 func (r *EventSuite) TestSetAndClear() {
 	event := New()
 	mutex := sync.Mutex{}
-	results := make([]bool, 0)
+	results := make([]error, 0)
 	timeout := 250 * time.Millisecond
 
 	finish := sync.WaitGroup{}
@@ -178,9 +178,9 @@ func (r *EventSuite) TestSetAndClear() {
 	event.Set()
 	event.Clear()
 	finish.Wait()
-	expected := make([]bool, N)
+	expected := make([]error, N)
 	for i := range expected {
-		expected[i] = true
+		expected[i] = nil
 	}
 	assert.Equal(r.T(), expected, results)
 }

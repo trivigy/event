@@ -25,7 +25,7 @@ import (
 
 func main() {
 	mutex := sync.Mutex{}
-    	results := make([]bool, 0)
+    	results := make([]error, 0)
     
     	start := sync.WaitGroup{}
     	finish := sync.WaitGroup{}
