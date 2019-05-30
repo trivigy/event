@@ -46,7 +46,7 @@ func (r *Event) Clear() {
 
 // Wait blocks until the event is set to true. If the event is already set,
 // returns immediately. Otherwise blocks until another goroutine sets the event.
-func (r *Event) Wait(ctx context.Context) bool {
+func (r *Event) Wait(ctx context.Context) error {
 	event := <-r.next
 	r.next <- event
 	if event != nil {
@@ -55,9 +55,9 @@ func (r *Event) Wait(ctx context.Context) bool {
 		}
 		select {
 		case <-ctx.Done():
-			return false
+			return ctx.Err()
 		case <-event:
 		}
 	}
-	return true
+	return nil
 }
