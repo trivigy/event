@@ -24,7 +24,7 @@ import (
 )
 
 func main() {
-		mutex := sync.Mutex{}
+	mutex := sync.Mutex{}
     	results := make([]bool, 0)
     
     	start := sync.WaitGroup{}
