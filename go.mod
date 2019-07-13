@@ -1,4 +1,4 @@
-module github.com/syncaide/event
+module github.com/trivigy/event
 
 go 1.12
 

@@ -1,10 +1,8 @@
 # Event
-
-[![Discord](https://img.shields.io/discord/428990244952735764.svg?style=flat&logo=discord&colorB=green)](https://discord.gg/M9nxJ3g)
-[![CircleCI branch](https://img.shields.io/circleci/project/github/syncaide/event/master.svg?label=master&logo=circleci)](https://circleci.com/gh/syncaide/workflows/event)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE.md)
-[![](https://godoc.org/github.com/syncaide/event?status.svg&style=flat)](http://godoc.org/github.com/syncaide/event)
-[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/syncaide/event.svg?style=flat&color=e36397&label=release)](https://github.com/syncaide/event/releases/latest)
+[![CircleCI branch](https://img.shields.io/circleci/project/github/trivigy/event/master.svg?label=master&logo=circleci)](https://circleci.com/gh/trivigy/workflows/event)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+[![](https://godoc.org/github.com/trivigy/event?status.svg&style=flat)](http://godoc.org/github.com/trivigy/event)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/trivigy/event.svg?style=flat&color=e36397&label=release)](https://github.com/trivigy/event/releases/latest)
 
 ## Introduction
 Event is a simple locking primitives which allows for sending notifications 
@@ -20,7 +18,7 @@ import (
 	"time"
 	
 	"github.com/pkg/errors"
-	"github.com/syncaide/event"
+	"github.com/trivigy/event"
 )
 
 func main() {
